@@ -147,10 +147,10 @@ public class Window extends javax.swing.JFrame {
         jPanelSlider.setLayout(jPanelSliderLayout);
         jPanelSliderLayout.setHorizontalGroup(
             jPanelSliderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelSliderLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanelSliderLayout.createSequentialGroup()
+                .addGap(214, 214, 214)
                 .addComponent(jSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(202, 202, 202))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanelSliderLayout.setVerticalGroup(
             jPanelSliderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -160,7 +160,7 @@ public class Window extends javax.swing.JFrame {
                 .addContainerGap(28, Short.MAX_VALUE))
         );
 
-        jSplitPane1.setDividerLocation(375);
+        jSplitPane1.setDividerLocation(385);
         jSplitPane1.setEnabled(false);
 
         jSplitPane2.setDividerLocation(150);
@@ -179,7 +179,7 @@ public class Window extends javax.swing.JFrame {
             jPanelNotesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelNotesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanelNotesLayout.setVerticalGroup(
@@ -193,9 +193,11 @@ public class Window extends javax.swing.JFrame {
         jSplitPane2.setBottomComponent(jPanelNotes);
 
         jPanelImage.setBorder(javax.swing.BorderFactory.createTitledBorder("Photo"));
-        jPanelImage.setMaximumSize(new java.awt.Dimension(300, 300));
-        jPanelImage.setPreferredSize(new java.awt.Dimension(300, 300));
+        jPanelImage.setMaximumSize(new java.awt.Dimension(3333, 3030));
+        jPanelImage.setPreferredSize(new java.awt.Dimension(200, 200));
 
+        jLabelImage.setToolTipText("");
+        jLabelImage.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jLabelImage.setMaximumSize(new java.awt.Dimension(345, 120));
         jLabelImage.setMinimumSize(new java.awt.Dimension(345, 200));
         jLabelImage.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -210,7 +212,7 @@ public class Window extends javax.swing.JFrame {
             jPanelImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelImageLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabelImage, javax.swing.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)
+                .addComponent(jLabelImage, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanelImageLayout.setVerticalGroup(
@@ -255,7 +257,7 @@ public class Window extends javax.swing.JFrame {
                             .addComponent(jLabel3)
                             .addComponent(jLabel2))
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanelDetailsLayout.setVerticalGroup(
@@ -322,10 +324,10 @@ public class Window extends javax.swing.JFrame {
             while (file.available() > 0) {
                 p = (Person) in.readObject();
             }
-            
+
             in.close();
             file.close();
-            
+
             // set write data on texfields
             jTextFieldName.setText(p.getName());
             jTextFieldPhone.setText(p.getPhone());
@@ -348,6 +350,8 @@ public class Window extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonNewActionPerformed
 
     private void jButtonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveActionPerformed
+        //TODO: output files into arraylist for multiple file handling
+        
         Person person = new Person(jTextFieldName.getText(), jTextFieldPhone.getText(),
                 jTextFieldEmail.getText(), jTextAreaAddress.getText(), jTextAreaNotes.getText(), jLabelImage.getIcon());
 
@@ -359,19 +363,18 @@ public class Window extends javax.swing.JFrame {
             out.close();
             file.close();
         } catch (Exception e) {
-
+            System.out.println(e.getMessage());
         }
     }//GEN-LAST:event_jButtonSaveActionPerformed
 
     private void loadImage(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loadImage
         JFileChooser fileChooser = new JFileChooser();
 
-        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+        if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
             ImageIcon image = new ImageIcon(fileChooser.getSelectedFile().getAbsolutePath());
 
-            ImageIcon imageIcon = new ImageIcon(image.getImage().getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_SMOOTH));
+            ImageIcon imageIcon = new ImageIcon(image.getImage().getScaledInstance(-1, jLabelImage.getHeight(), Image.SCALE_DEFAULT));
             jLabelImage.setIcon(imageIcon);
-
         }
     }//GEN-LAST:event_loadImage
 
@@ -444,5 +447,6 @@ public class Window extends javax.swing.JFrame {
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
 
+    // our variables
     private Person p;
 }
