@@ -23,16 +23,16 @@ public class Person implements Serializable {
         this.phone = phone;
         this.email = email;
         this.address = address;
-        this.image = image;
         this.notes = notes;
+        this.image = image;
     }
 
     String name;
     String phone;
     String email;
     String address;
-    Icon image;
     String notes;
+    Icon image;
 
     //getters
     public String getName() {
@@ -51,12 +51,12 @@ public class Person implements Serializable {
         return address;
     }
 
-    public Icon getImage() {
-        return image;
-    }
-
     public String getNotes() {
         return notes;
+    }
+
+    public Icon getImage() {
+        return image;
     }
 
     //setters
@@ -76,11 +76,11 @@ public class Person implements Serializable {
         this.address = address;
     }
 
-    public void setImage(Icon image) {
-        this.image = image;
-    }
-
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public void setImage(Icon image) {
+        this.image = image;
     }
 }

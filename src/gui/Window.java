@@ -11,10 +11,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -26,8 +28,10 @@ public class Window extends javax.swing.JFrame {
      * Creates new form Window
      */
     public Window() {
-        initComponents();
         loadData();
+        initComponents();
+        jSlider.addChangeListener(e -> sliderChanged());
+        System.out.println("Initial array list size = " + arrayList.size());
     }
 
     /**
@@ -92,6 +96,11 @@ public class Window extends javax.swing.JFrame {
         jButtonEdit.setFocusable(false);
         jButtonEdit.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonEdit.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEditActionPerformed(evt);
+            }
+        });
         jToolBar1.add(jButtonEdit);
 
         jButtonSave.setText("Save");
@@ -143,6 +152,12 @@ public class Window extends javax.swing.JFrame {
             .addGap(0, 341, Short.MAX_VALUE)
         );
 
+        jSlider.setMajorTickSpacing(1);
+        jSlider.setMaximum(arrayList.size()-1);
+        jSlider.setPaintLabels(true);
+        jSlider.setSnapToTicks(true);
+        jSlider.setValue(0);
+
         javax.swing.GroupLayout jPanelSliderLayout = new javax.swing.GroupLayout(jPanelSlider);
         jPanelSlider.setLayout(jPanelSliderLayout);
         jPanelSliderLayout.setHorizontalGroup(
@@ -157,7 +172,7 @@ public class Window extends javax.swing.JFrame {
             .addGroup(jPanelSliderLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         jSplitPane1.setDividerLocation(385);
@@ -169,6 +184,7 @@ public class Window extends javax.swing.JFrame {
 
         jPanelNotes.setBorder(javax.swing.BorderFactory.createTitledBorder("Notes"));
 
+        jTextAreaNotes.setEditable(false);
         jTextAreaNotes.setColumns(20);
         jTextAreaNotes.setRows(5);
         jScrollPane1.setViewportView(jTextAreaNotes);
@@ -186,7 +202,7 @@ public class Window extends javax.swing.JFrame {
             jPanelNotesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelNotesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -236,6 +252,13 @@ public class Window extends javax.swing.JFrame {
 
         jLabel4.setText("Address");
 
+        jTextFieldPhone.setEditable(false);
+
+        jTextFieldEmail.setEditable(false);
+
+        jTextFieldName.setEditable(false);
+
+        jTextAreaAddress.setEditable(false);
         jTextAreaAddress.setColumns(20);
         jTextAreaAddress.setRows(5);
         jScrollPane2.setViewportView(jTextAreaAddress);
@@ -278,7 +301,7 @@ public class Window extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -305,15 +328,22 @@ public class Window extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanelMain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(64, Short.MAX_VALUE))
+                        .addGap(0, 58, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanelSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jPanelSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    public void sliderChanged() {
+        if (jSlider.getValue() >= 0 && jSlider.getValue() < arrayList.size()) {
+            loadFields(arrayList.get(jSlider.getValue()));
+        }
+    }
 
     private void loadData() {
         try {
@@ -322,22 +352,27 @@ public class Window extends javax.swing.JFrame {
 
             // read file onto global variable Person p
             while (file.available() > 0) {
-                p = (Person) in.readObject();
+                person = (Person) in.readObject();
+                arrayList.add(person);
             }
 
             in.close();
             file.close();
 
-            // set write data on texfields
-            jTextFieldName.setText(p.getName());
-            jTextFieldPhone.setText(p.getPhone());
-            jTextFieldEmail.setText(p.getName());
-            jTextAreaAddress.setText(p.getAddress());
-            jTextAreaNotes.setText(p.getNotes());
-            jLabelImage.setIcon(p.getImage());
+            loadFields(person);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    private void loadFields(Person p) {
+        // set write data on texfields
+        jTextFieldName.setText(p.getName());
+        jTextFieldPhone.setText(p.getPhone());
+        jTextFieldEmail.setText(p.getEmail());
+        jTextAreaAddress.setText(p.getAddress());
+        jTextAreaNotes.setText(p.getNotes());
+        jLabelImage.setIcon(p.getImage());
     }
 
     private void jButtonNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNewActionPerformed
@@ -347,23 +382,75 @@ public class Window extends javax.swing.JFrame {
         jTextAreaAddress.setText("");
         jTextAreaNotes.setText("");
         jLabelImage.setIcon(null);
+
+        setEditableTrue();
+
+        isNew = true;
     }//GEN-LAST:event_jButtonNewActionPerformed
 
+    private void setEditableTrue() {
+        jTextFieldName.setEditable(true);
+        jTextFieldPhone.setEditable(true);
+        jTextFieldEmail.setEditable(true);
+        jTextAreaAddress.setEditable(true);
+        jTextAreaNotes.setEditable(true);
+    }
+
+    private void setEditableFalse() {
+        jTextFieldName.setEditable(false);
+        jTextFieldPhone.setEditable(false);
+        jTextFieldEmail.setEditable(false);
+        jTextAreaAddress.setEditable(false);
+        jTextAreaNotes.setEditable(false);
+    }
+
     private void jButtonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveActionPerformed
-        //TODO: output files into arraylist for multiple file handling
-        
         Person person = new Person(jTextFieldName.getText(), jTextFieldPhone.getText(),
                 jTextFieldEmail.getText(), jTextAreaAddress.getText(), jTextAreaNotes.getText(), jLabelImage.getIcon());
 
-        try {
-            FileOutputStream file = new FileOutputStream("phonebook.dat");
-            ObjectOutputStream out = new ObjectOutputStream(file);
-            out.writeObject(person);
+        if (isNew == true) {
+            try {
+                FileOutputStream file = new FileOutputStream("phonebook.dat");
+                ObjectOutputStream out = new ObjectOutputStream(file);
 
-            out.close();
-            file.close();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+                arrayList.add(person);
+
+                for (int i = 0; i < arrayList.size(); i++) {
+                    out.writeObject(arrayList.get(i));
+                }
+
+                System.out.println("Array list size after new save = " + arrayList.size());
+
+                out.close();
+                file.close();
+
+                setEditableFalse();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+
+            isNew = false;
+        } else {
+            try {
+                FileOutputStream file = new FileOutputStream("phonebook.dat");
+                ObjectOutputStream out = new ObjectOutputStream(file);
+
+                arrayList.set(jSlider.getValue(), person);
+
+                for (int i = 0; i < arrayList.size(); i++) {
+                    out.writeObject(arrayList.get(i));
+                }
+
+                System.out.println("Array list size after edit = " + arrayList.size());
+
+                out.close();
+                file.close();
+
+                setEditableFalse();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+
         }
     }//GEN-LAST:event_jButtonSaveActionPerformed
 
@@ -377,6 +464,10 @@ public class Window extends javax.swing.JFrame {
             jLabelImage.setIcon(imageIcon);
         }
     }//GEN-LAST:event_loadImage
+
+    private void jButtonEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditActionPerformed
+        setEditableTrue();
+    }//GEN-LAST:event_jButtonEditActionPerformed
 
     /**
      * @param args the command line arguments
@@ -448,5 +539,7 @@ public class Window extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     // our variables
-    private Person p;
+    private boolean isNew = false;
+    private Person person;
+    private ArrayList<Person> arrayList = new ArrayList<Person>();
 }
