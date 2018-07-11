@@ -1,23 +1,36 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package gui;
 
 import java.awt.Image;
-import java.awt.image.BufferedImage;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import javax.imageio.ImageIO;
-import javax.swing.Icon;
+import java.util.Collections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.UIManager;
 
 /**
  *
- * @author Gonçalo Loureiro
- * @author Gonçalo Proença
- * @author Hélio Redrigues
+ * @author osao
  */
 public class Window extends javax.swing.JFrame {
 
@@ -28,6 +41,7 @@ public class Window extends javax.swing.JFrame {
         loadData();
         initComponents();
         jSlider.addChangeListener(e -> sliderChanged());
+        jSlider.setMaximum(arrayList.size() - 1);
         System.out.println("Initial array list size = " + arrayList.size());
     }
 
@@ -73,6 +87,7 @@ public class Window extends javax.swing.JFrame {
         jTextAreaAddress = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setLocation(new java.awt.Point(0, 0));
         setMinimumSize(new java.awt.Dimension(530, 530));
         setResizable(false);
 
@@ -116,6 +131,11 @@ public class Window extends javax.swing.JFrame {
         jButtonDelete.setFocusable(false);
         jButtonDelete.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonDelete.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDeleteActionPerformed(evt);
+            }
+        });
         jToolBar1.add(jButtonDelete);
         jToolBar1.add(jSeparator1);
 
@@ -129,6 +149,11 @@ public class Window extends javax.swing.JFrame {
         jButtonPrint.setFocusable(false);
         jButtonPrint.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonPrint.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonPrint.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonPrintActionPerformed(evt);
+            }
+        });
         jToolBar1.add(jButtonPrint);
         jToolBar1.add(jSeparator2);
 
@@ -150,7 +175,7 @@ public class Window extends javax.swing.JFrame {
         );
 
         jSlider.setMajorTickSpacing(1);
-        jSlider.setMaximum(arrayList.size()-1);
+        jSlider.setMaximum(30);
         jSlider.setPaintLabels(true);
         jSlider.setSnapToTicks(true);
         jSlider.setValue(0);
@@ -159,10 +184,7 @@ public class Window extends javax.swing.JFrame {
         jPanelSlider.setLayout(jPanelSliderLayout);
         jPanelSliderLayout.setHorizontalGroup(
             jPanelSliderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelSliderLayout.createSequentialGroup()
-                .addGap(214, 214, 214)
-                .addComponent(jSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanelSliderLayout.setVerticalGroup(
             jPanelSliderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -283,7 +305,7 @@ public class Window extends javax.swing.JFrame {
         jPanelDetailsLayout.setVerticalGroup(
             jPanelDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelDetailsLayout.createSequentialGroup()
-                .addGap(17, 17, 17)
+                .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -298,7 +320,7 @@ public class Window extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -334,6 +356,7 @@ public class Window extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     public void sliderChanged() {
@@ -422,6 +445,8 @@ public class Window extends javax.swing.JFrame {
                 file.close();
 
                 setEditableFalse();
+
+                jSlider.setMaximum(arrayList.size() - 1);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -447,7 +472,6 @@ public class Window extends javax.swing.JFrame {
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
-
         }
     }//GEN-LAST:event_jButtonSaveActionPerformed
 
@@ -465,6 +489,46 @@ public class Window extends javax.swing.JFrame {
     private void jButtonEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditActionPerformed
         setEditableTrue();
     }//GEN-LAST:event_jButtonEditActionPerformed
+
+    private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
+        int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure?", "Warning", JOptionPane.YES_NO_OPTION);
+        
+        if (dialogResult == JOptionPane.YES_OPTION) {
+            arrayList.remove(jSlider.getValue());
+
+            try {
+                FileOutputStream file = new FileOutputStream("phonebook.dat");
+                ObjectOutputStream out = new ObjectOutputStream(file);
+
+                for (int i = 0; i < arrayList.size(); i++) {
+                    out.writeObject(arrayList.get(i));
+                }
+
+                System.out.println("Array list size after new save = " + arrayList.size());
+
+                out.close();
+                file.close();
+
+                setEditableFalse();
+
+                jSlider.setMaximum(arrayList.size() - 1);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }//GEN-LAST:event_jButtonDeleteActionPerformed
+
+    private void jButtonPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPrintActionPerformed
+        JTextField printText = new JTextField();
+        
+        printText.setText("Morada " + jTextAreaAddress.getText() + " Name " + jTextFieldName.getText());
+        
+        try {
+            printText.print();
+        } catch (PrinterException ex) {
+            Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButtonPrintActionPerformed
 
     /**
      * @param args the command line arguments
