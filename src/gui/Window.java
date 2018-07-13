@@ -5,16 +5,23 @@
  */
 package gui;
 
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.logging.Level;
@@ -28,6 +35,18 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Paths;
+import javax.swing.text.Document;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.apache.commons.io.FileUtils;
+
 /**
  *
  * @author osao
@@ -38,11 +57,13 @@ public class Window extends javax.swing.JFrame {
      * Creates new form Window
      */
     public Window() {
+        makeDirectories();
         loadData();
         initComponents();
         jSlider.addChangeListener(e -> sliderChanged());
         jSlider.setMaximum(arrayList.size() - 1);
         System.out.println("Initial array list size = " + arrayList.size());
+        System.out.println(iconName.length);
     }
 
     /**
@@ -143,6 +164,11 @@ public class Window extends javax.swing.JFrame {
         jButtonExport.setFocusable(false);
         jButtonExport.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonExport.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonExport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonExportActionPerformed(evt);
+            }
+        });
         jToolBar1.add(jButtonExport);
 
         jButtonPrint.setText("Print");
@@ -381,7 +407,44 @@ public class Window extends javax.swing.JFrame {
 
             loadFields(person);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            // System.out.println(e.getMessage());
+        }
+    }
+
+    private void makeDirectories() {
+        File images = new File("images");
+        File export = new File("export");
+
+        // if the directory images does not exist, create it
+        if (!images.exists()) {
+            System.out.println("creating directory: " + images.getName());
+            boolean result = false;
+
+            try {
+                images.mkdir();
+                result = true;
+            } catch (SecurityException se) {
+                //handle it
+            }
+            if (result) {
+                System.out.println("DIR created");
+            }
+        }
+
+        // if the directory export does not exist, create it
+        if (!export.exists()) {
+            System.out.println("creating directory: " + export.getName());
+            boolean result = false;
+
+            try {
+                export.mkdir();
+                result = true;
+            } catch (SecurityException se) {
+                //handle it
+            }
+            if (result) {
+                System.out.println("DIR created");
+            }
         }
     }
 
@@ -440,6 +503,7 @@ public class Window extends javax.swing.JFrame {
                 }
 
                 System.out.println("Array list size after new save = " + arrayList.size());
+                System.out.println(person.getImage());
 
                 out.close();
                 file.close();
@@ -447,12 +511,22 @@ public class Window extends javax.swing.JFrame {
                 setEditableFalse();
 
                 jSlider.setMaximum(arrayList.size() - 1);
-            } catch (Exception e) {
+            } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
 
+            // copy image
+            if (person.getImage() != null) {
+                try {
+                    copyImage();
+                    System.out.println("Image copied successfuly");
+                } catch (IOException ex) {
+                    Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
             isNew = false;
-        } else {
+        } else if (isEdit == true) {
             try {
                 FileOutputStream file = new FileOutputStream("phonebook.dat");
                 ObjectOutputStream out = new ObjectOutputStream(file);
@@ -469,30 +543,51 @@ public class Window extends javax.swing.JFrame {
                 file.close();
 
                 setEditableFalse();
-            } catch (Exception e) {
+            } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
+
+            // copy image
+            if (person.getImage() != null) {
+                try {
+                    copyImage();
+                    System.out.println("Image copied successfuly");
+                } catch (IOException ex) {
+                    Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
+            isEdit = false;
         }
     }//GEN-LAST:event_jButtonSaveActionPerformed
 
     private void loadImage(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loadImage
-        JFileChooser fileChooser = new JFileChooser();
+        jFileChooser = new JFileChooser();
 
-        if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-            ImageIcon image = new ImageIcon(fileChooser.getSelectedFile().getAbsolutePath());
+        if (jFileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            ImageIcon image = new ImageIcon(jFileChooser.getSelectedFile().getAbsolutePath());
 
             ImageIcon imageIcon = new ImageIcon(image.getImage().getScaledInstance(-1, jLabelImage.getHeight(), Image.SCALE_DEFAULT));
             jLabelImage.setIcon(imageIcon);
         }
     }//GEN-LAST:event_loadImage
 
+    public void copyImage() throws IOException {
+
+        File file = new File(jFileChooser.getSelectedFile().getAbsolutePath());
+        File destinationDir = new File("images");
+
+        FileUtils.copyFileToDirectory(file, destinationDir);
+    }
+
     private void jButtonEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditActionPerformed
         setEditableTrue();
+        isEdit = true;
     }//GEN-LAST:event_jButtonEditActionPerformed
 
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
         int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure?", "Warning", JOptionPane.YES_NO_OPTION);
-        
+
         if (dialogResult == JOptionPane.YES_OPTION) {
             arrayList.remove(jSlider.getValue());
 
@@ -520,15 +615,21 @@ public class Window extends javax.swing.JFrame {
 
     private void jButtonPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPrintActionPerformed
         JTextField printText = new JTextField();
-        
+
         printText.setText("Morada " + jTextAreaAddress.getText() + " Name " + jTextFieldName.getText());
-        
+
         try {
             printText.print();
+
         } catch (PrinterException ex) {
-            Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Window.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButtonPrintActionPerformed
+
+    private void jButtonExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExportActionPerformed
+
+    }//GEN-LAST:event_jButtonExportActionPerformed
 
     /**
      * @param args the command line arguments
@@ -544,16 +645,24 @@ public class Window extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Window.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Window.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Window.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Window.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Window.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Window.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Window.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Window.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -600,7 +709,10 @@ public class Window extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     // our variables
+    JFileChooser jFileChooser;
     private boolean isNew = false;
+    private boolean isEdit = false;
     private Person person;
     private ArrayList<Person> arrayList = new ArrayList<Person>();
+    private String[] iconName = new String[arrayList.size()];
 }

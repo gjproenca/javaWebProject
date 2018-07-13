@@ -27,14 +27,19 @@ public class Person implements Serializable {
         this.image = image;
     }
 
-    String name;
-    String phone;
-    String email;
-    String address;
-    String notes;
-    Icon image;
+    private int id;
+    private String name;
+    private String phone;
+    private String email;
+    private String address;
+    private String notes;
+    private Icon image;
 
-    //getters
+    //getters  
+    public int getId() {
+        return id;
+    }
+
     public String getName() {
         return name;
     }
@@ -60,6 +65,10 @@ public class Person implements Serializable {
     }
 
     //setters
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public void setName(String name) {
         this.name = name;
     }

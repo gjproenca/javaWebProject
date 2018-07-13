@@ -1,4 +1,5 @@
 package gui;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -8,18 +9,18 @@ import static java.awt.print.Printable.PAGE_EXISTS;
 
 public class Printer implements Printable, ActionListener {
 
-
     public int print(Graphics g, PageFormat pf, int page) throws
-                                                        PrinterException {
+            PrinterException {
 
-        if (page > 0) { /* We have only one page, and 'page' is zero-based */
+        if (page > 0) {
+            /* We have only one page, and 'page' is zero-based */
             return NO_SUCH_PAGE;
         }
 
         /* User (0,0) is typically outside the imageable area, so we must
          * translate by the X and Y values in the PageFormat to avoid clipping
          */
-        Graphics2D g2d = (Graphics2D)g;
+        Graphics2D g2d = (Graphics2D) g;
         g2d.translate(pf.getImageableX(), pf.getImageableY());
 
         /* Now we perform our rendering */
@@ -30,16 +31,16 @@ public class Printer implements Printable, ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-         PrinterJob job = PrinterJob.getPrinterJob();
-         job.setPrintable(this);
-         boolean ok = job.printDialog();
-         if (ok) {
-             try {
-                  job.print();
-             } catch (PrinterException ex) {
-              /* The job did not successfully complete */
-             }
-         }
+        PrinterJob job = PrinterJob.getPrinterJob();
+        job.setPrintable(this);
+        boolean ok = job.printDialog();
+        if (ok) {
+            try {
+                job.print();
+            } catch (PrinterException ex) {
+                /* The job did not successfully complete */
+            }
+        }
     }
 
 //    public static void main(String args[]) {
