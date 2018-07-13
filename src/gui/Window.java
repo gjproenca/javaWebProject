@@ -5,45 +5,10 @@
  */
 package gui;
 
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.print.Printable;
 import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Paths;
-import javax.swing.text.Document;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.awt.Image;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -64,7 +29,6 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 
 import org.apache.commons.io.FileUtils;
@@ -650,7 +614,63 @@ public class Window extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonPrintActionPerformed
 
     private void jButtonExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExportActionPerformed
+        DocumentBuilderFactory documentbuilderfactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder documentBuilder = null;
+        try {
+            documentBuilder = documentbuilderfactory.newDocumentBuilder();
+        } catch (ParserConfigurationException ex) {
+            Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        org.w3c.dom.Document document = documentBuilder.newDocument();
+
+        document.setXmlStandalone(true);
+        Element rootElement = document.createElement("Contact");
+        document.appendChild(rootElement);      
         
+        for (int i = 0; i < arrayList.size(); i++) {
+            
+            Element personElement = document.createElement("PersonDetails");
+            //personElement.setAttribute("id", "" + tab[i].getId());
+            rootElement.appendChild(personElement);
+            
+            Element name = document.createElement("Name");
+            name.appendChild(document.createTextNode(arrayList.get(1).getName()));
+            personElement.appendChild(name);
+
+            Element phone = document.createElement("Phone");
+            phone.appendChild(document.createTextNode(arrayList.get(1).getPhone()));
+            personElement.appendChild(phone);
+
+            Element email = document.createElement("Email");
+            email.appendChild(document.createTextNode(arrayList.get(1).getEmail()));
+            personElement.appendChild(email);
+
+            Element address = document.createElement("Address");
+            address.appendChild(document.createTextNode(arrayList.get(1).getAddress()));
+            personElement.appendChild(address);
+
+            Element notes = document.createElement("Notes");
+            notes.appendChild(document.createTextNode(arrayList.get(1).getNotes()));
+            personElement.appendChild(notes);
+        }
+
+        TransformerFactory transformerfactory = TransformerFactory.newInstance();
+        Transformer transformer = null;
+        try {
+            transformer = transformerfactory.newTransformer();
+        } catch (TransformerConfigurationException ex) {
+            Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        DOMSource source = new DOMSource(document);
+        StreamResult streamResult = new StreamResult(new File("export/contacts.xml"));
+
+        try {
+            transformer.transform(source, streamResult);
+        } catch (TransformerException ex) {
+            Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButtonExportActionPerformed
 
     /**
