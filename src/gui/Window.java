@@ -46,8 +46,14 @@ public class Window extends javax.swing.JFrame {
         makeDirectories();
         loadData();
         initComponents();
+
         jSlider.addChangeListener(e -> sliderChanged());
-        jSlider.setMaximum(arrayList.size() - 1);
+        if (arrayList.size() == 0) {
+            jSlider.setMaximum(arrayList.size());
+        } else {
+            jSlider.setMaximum(arrayList.size() - 1);
+        }
+
         System.out.println("Initial array list size = " + arrayList.size());
         System.out.println(iconName.length);
     }
@@ -400,6 +406,7 @@ public class Window extends javax.swing.JFrame {
     private void makeDirectories() {
         File images = new File("images");
         File export = new File("export");
+        File datFile = new File("phonebook.dat");
 
         // if the directory images does not exist, create it
         if (!images.exists()) {
@@ -430,6 +437,19 @@ public class Window extends javax.swing.JFrame {
             }
             if (result) {
                 System.out.println("DIR created");
+            }
+        }
+
+        // if the directory export does not exist, create it
+        if (!datFile.exists()) {
+            try {
+                if (datFile.createNewFile()) {
+                    System.out.println("File is created!");
+                } else {
+                    System.out.println("File already exists.");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -542,8 +562,11 @@ public class Window extends javax.swing.JFrame {
                     Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            
+
             isEdit = false;
+        } else {
+            // TODO: show dialog nothing to save
+            // TODO: fix slider bar not reloading data if there is no phonebook file
         }
     }//GEN-LAST:event_jButtonSaveActionPerformed
 
@@ -559,7 +582,6 @@ public class Window extends javax.swing.JFrame {
     }//GEN-LAST:event_loadImage
 
     public void copyImage() throws IOException {
-
         File file = new File(jFileChooser.getSelectedFile().getAbsolutePath());
         File destinationDir = new File("images");
 
@@ -616,6 +638,7 @@ public class Window extends javax.swing.JFrame {
     private void jButtonExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExportActionPerformed
         DocumentBuilderFactory documentbuilderfactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = null;
+
         try {
             documentBuilder = documentbuilderfactory.newDocumentBuilder();
         } catch (ParserConfigurationException ex) {
@@ -626,14 +649,14 @@ public class Window extends javax.swing.JFrame {
 
         document.setXmlStandalone(true);
         Element rootElement = document.createElement("Contact");
-        document.appendChild(rootElement);      
-        
+        document.appendChild(rootElement);
+
         for (int i = 0; i < arrayList.size(); i++) {
-            
+
             Element personElement = document.createElement("PersonDetails");
             //personElement.setAttribute("id", "" + tab[i].getId());
             rootElement.appendChild(personElement);
-            
+
             Element name = document.createElement("Name");
             name.appendChild(document.createTextNode(arrayList.get(1).getName()));
             personElement.appendChild(name);
@@ -663,14 +686,26 @@ public class Window extends javax.swing.JFrame {
             Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        DOMSource source = new DOMSource(document);
-        StreamResult streamResult = new StreamResult(new File("export/contacts.xml"));
+        //---Save file
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Specify a file to save");
 
-        try {
-            transformer.transform(source, streamResult);
-        } catch (TransformerException ex) {
-            Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
+        int userSelection = fileChooser.showSaveDialog(this);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+            System.out.println("Save as file: " + fileToSave.getAbsolutePath());
+
+            DOMSource source = new DOMSource(document);
+            StreamResult streamResult = new StreamResult(new File(fileToSave.getAbsolutePath() + ".xml"));
+
+            try {
+                transformer.transform(source, streamResult);
+            } catch (TransformerException ex) {
+                Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
+        //---
     }//GEN-LAST:event_jButtonExportActionPerformed
 
     /**
