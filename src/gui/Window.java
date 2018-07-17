@@ -55,7 +55,6 @@ public class Window extends javax.swing.JFrame {
         }
 
         System.out.println("Initial array list size = " + arrayList.size());
-        System.out.println(iconName.length);
     }
 
     /**
@@ -471,6 +470,7 @@ public class Window extends javax.swing.JFrame {
         jTextAreaAddress.setText("");
         jTextAreaNotes.setText("");
         jLabelImage.setIcon(null);
+        iconName = "";
 
         setEditableTrue();
 
@@ -495,7 +495,7 @@ public class Window extends javax.swing.JFrame {
 
     private void jButtonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveActionPerformed
         Person person = new Person(jTextFieldName.getText(), jTextFieldPhone.getText(),
-                jTextFieldEmail.getText(), jTextAreaAddress.getText(), jTextAreaNotes.getText(), jLabelImage.getIcon());
+                jTextFieldEmail.getText(), jTextAreaAddress.getText(), jTextAreaNotes.getText(), jLabelImage.getIcon(), iconName);
 
         if (isNew == true) {
             try {
@@ -571,13 +571,16 @@ public class Window extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonSaveActionPerformed
 
     private void loadImage(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loadImage
-        jFileChooser = new JFileChooser();
+        if (isNew == true || isEdit == true) {
+            jFileChooser = new JFileChooser();
 
-        if (jFileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-            ImageIcon image = new ImageIcon(jFileChooser.getSelectedFile().getAbsolutePath());
+            if (jFileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                iconName = jFileChooser.getSelectedFile().getName();
+                ImageIcon image = new ImageIcon(jFileChooser.getSelectedFile().getAbsolutePath());
 
-            ImageIcon imageIcon = new ImageIcon(image.getImage().getScaledInstance(-1, jLabelImage.getHeight(), Image.SCALE_DEFAULT));
-            jLabelImage.setIcon(imageIcon);
+                ImageIcon imageIcon = new ImageIcon(image.getImage().getScaledInstance(-1, jLabelImage.getHeight(), Image.SCALE_DEFAULT));
+                jLabelImage.setIcon(imageIcon);
+            }
         }
     }//GEN-LAST:event_loadImage
 
@@ -591,6 +594,7 @@ public class Window extends javax.swing.JFrame {
     private void jButtonEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditActionPerformed
         setEditableTrue();
         isEdit = true;
+        //TODO: cancel button
     }//GEN-LAST:event_jButtonEditActionPerformed
 
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
@@ -658,23 +662,51 @@ public class Window extends javax.swing.JFrame {
             rootElement.appendChild(personElement);
 
             Element name = document.createElement("Name");
-            name.appendChild(document.createTextNode(arrayList.get(1).getName()));
+            if (arrayList.get(i).getName().isEmpty()) {
+                name.appendChild(document.createTextNode("This contact has no name"));
+            } else {
+                name.appendChild(document.createTextNode(arrayList.get(i).getName()));
+            }
             personElement.appendChild(name);
 
             Element phone = document.createElement("Phone");
-            phone.appendChild(document.createTextNode(arrayList.get(1).getPhone()));
+            if (arrayList.get(i).getPhone().isEmpty()) {
+                phone.appendChild(document.createTextNode("This contact has no phone"));
+            } else {
+                phone.appendChild(document.createTextNode(arrayList.get(i).getPhone()));
+            }
             personElement.appendChild(phone);
 
             Element email = document.createElement("Email");
-            email.appendChild(document.createTextNode(arrayList.get(1).getEmail()));
+            if (arrayList.get(i).getEmail().isEmpty()) {
+                email.appendChild(document.createTextNode("This contact has no email"));
+            } else {
+                email.appendChild(document.createTextNode(arrayList.get(i).getEmail()));
+            }
             personElement.appendChild(email);
 
             Element address = document.createElement("Address");
-            address.appendChild(document.createTextNode(arrayList.get(1).getAddress()));
+            if (arrayList.get(i).getAddress().isEmpty()) {
+                address.appendChild(document.createTextNode("This contact has no address"));
+            } else {
+                address.appendChild(document.createTextNode(arrayList.get(i).getAddress()));
+            }
             personElement.appendChild(address);
 
+            Element iconName = document.createElement("ImageName");
+            if (arrayList.get(i).getIconName().isEmpty()) {
+                iconName.appendChild(document.createTextNode("This contact has no photo"));
+            } else {
+                iconName.appendChild(document.createTextNode(arrayList.get(i).getIconName()));
+            }
+            personElement.appendChild(iconName);
+
             Element notes = document.createElement("Notes");
-            notes.appendChild(document.createTextNode(arrayList.get(1).getNotes()));
+            if (arrayList.get(i).getNotes().isEmpty()) {
+                notes.appendChild(document.createTextNode("This contact has no notes"));
+            } else {
+                notes.appendChild(document.createTextNode(arrayList.get(i).getNotes()));
+            }
             personElement.appendChild(notes);
         }
 
@@ -789,7 +821,7 @@ public class Window extends javax.swing.JFrame {
     JFileChooser jFileChooser;
     private boolean isNew = false;
     private boolean isEdit = false;
+    private String iconName = "";
     private Person person;
     private ArrayList<Person> arrayList = new ArrayList<Person>();
-    private String[] iconName = new String[arrayList.size()];
 }

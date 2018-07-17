@@ -18,13 +18,14 @@ public class Person implements Serializable {
 
     //constructor
     //atributos
-    public Person(String name, String phone, String email, String address, String notes, Icon image) {
+    public Person(String name, String phone, String email, String address, String notes, Icon image, String iconName) {
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
         this.notes = notes;
         this.image = image;
+        this.iconName = iconName;
     }
 
     private String name;
@@ -33,6 +34,7 @@ public class Person implements Serializable {
     private String address;
     private String notes;
     private Icon image;
+    private String iconName;
 
     //getters  
     public String getName() {
@@ -59,6 +61,10 @@ public class Person implements Serializable {
         return image;
     }
 
+    public String getIconName() {
+        return iconName;
+    }
+
     //setters
     public void setName(String name) {
         this.name = name;
@@ -82,5 +88,9 @@ public class Person implements Serializable {
 
     public void setImage(Icon image) {
         this.image = image;
+    }
+
+    public void setIconName(String iconName) {
+        this.iconName = iconName;
     }
 }
