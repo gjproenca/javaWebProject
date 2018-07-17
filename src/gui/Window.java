@@ -522,13 +522,16 @@ public class Window extends javax.swing.JFrame {
             }
 
             // copy image
-            if (person.getImage() != null) {
-                try {
-                    copyImage();
-                    System.out.println("Image copied successfuly");
-                } catch (IOException ex) {
-                    Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
+            if (isNewImage == true) {
+                if (person.getImage() != null) {
+                    try {
+                        copyImage();
+                        System.out.println("Image copied successfuly");
+                    } catch (IOException ex) {
+                        Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
+                isNewImage = false;
             }
 
             isNew = false;
@@ -554,13 +557,16 @@ public class Window extends javax.swing.JFrame {
             }
 
             // copy image
-            if (person.getImage() != null) {
-                try {
-                    copyImage();
-                    System.out.println("Image copied successfuly");
-                } catch (IOException ex) {
-                    Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
+            if (isNewImage == true) {
+                if (person.getImage() != null) {
+                    try {
+                        copyImage();
+                        System.out.println("Image copied successfuly");
+                    } catch (IOException ex) {
+                        Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
+                isNewImage = false;
             }
 
             isEdit = false;
@@ -572,6 +578,7 @@ public class Window extends javax.swing.JFrame {
 
     private void loadImage(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loadImage
         if (isNew == true || isEdit == true) {
+            iconName = "";
             jFileChooser = new JFileChooser();
 
             if (jFileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
@@ -580,6 +587,8 @@ public class Window extends javax.swing.JFrame {
 
                 ImageIcon imageIcon = new ImageIcon(image.getImage().getScaledInstance(-1, jLabelImage.getHeight(), Image.SCALE_DEFAULT));
                 jLabelImage.setIcon(imageIcon);
+
+                isNewImage = true;
             }
         }
     }//GEN-LAST:event_loadImage
@@ -592,6 +601,8 @@ public class Window extends javax.swing.JFrame {
     }
 
     private void jButtonEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditActionPerformed
+        iconName = arrayList.get(jSlider.getValue()).getIconName();
+
         setEditableTrue();
         isEdit = true;
         //TODO: cancel button
@@ -626,17 +637,6 @@ public class Window extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonDeleteActionPerformed
 
     private void jButtonPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPrintActionPerformed
-        JTextField printText = new JTextField();
-
-        printText.setText("Morada " + jTextAreaAddress.getText() + " Name " + jTextFieldName.getText());
-
-        try {
-            printText.print();
-
-        } catch (PrinterException ex) {
-            Logger.getLogger(Window.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
     }//GEN-LAST:event_jButtonPrintActionPerformed
 
     private void jButtonExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExportActionPerformed
@@ -821,6 +821,7 @@ public class Window extends javax.swing.JFrame {
     JFileChooser jFileChooser;
     private boolean isNew = false;
     private boolean isEdit = false;
+    private boolean isNewImage = false;
     private String iconName = "";
     private Person person;
     private ArrayList<Person> arrayList = new ArrayList<Person>();
