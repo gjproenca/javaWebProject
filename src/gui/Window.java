@@ -81,8 +81,6 @@ public class Window extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JToolBar.Separator();
         jButtonExport = new javax.swing.JButton();
         jButtonPrint = new javax.swing.JButton();
-        jSeparator2 = new javax.swing.JToolBar.Separator();
-        jButtonSearch = new javax.swing.JButton();
         jPanelMain = new javax.swing.JPanel();
         jPanelSlider = new javax.swing.JPanel();
         jSlider = new javax.swing.JSlider();
@@ -103,6 +101,8 @@ public class Window extends javax.swing.JFrame {
         jTextFieldName = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextAreaAddress = new javax.swing.JTextArea();
+        jButtonSearch = new javax.swing.JButton();
+        jTextFieldSearch = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setLocation(new java.awt.Point(0, 0));
@@ -178,13 +178,6 @@ public class Window extends javax.swing.JFrame {
             }
         });
         jToolBar1.add(jButtonPrint);
-        jToolBar1.add(jSeparator2);
-
-        jButtonSearch.setText("Search");
-        jButtonSearch.setFocusable(false);
-        jButtonSearch.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButtonSearch.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButtonSearch);
 
         javax.swing.GroupLayout jPanelMainLayout = new javax.swing.GroupLayout(jPanelMain);
         jPanelMain.setLayout(jPanelMainLayout);
@@ -207,14 +200,14 @@ public class Window extends javax.swing.JFrame {
         jPanelSlider.setLayout(jPanelSliderLayout);
         jPanelSliderLayout.setHorizontalGroup(
             jPanelSliderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jSlider, javax.swing.GroupLayout.DEFAULT_SIZE, 820, Short.MAX_VALUE)
         );
         jPanelSliderLayout.setVerticalGroup(
             jPanelSliderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelSliderLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(54, Short.MAX_VALUE))
         );
 
         jSplitPane1.setDividerLocation(385);
@@ -237,14 +230,14 @@ public class Window extends javax.swing.JFrame {
             jPanelNotesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelNotesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 407, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanelNotesLayout.setVerticalGroup(
             jPanelNotesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelNotesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -343,17 +336,32 @@ public class Window extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         jSplitPane1.setLeftComponent(jPanelDetails);
 
+        jButtonSearch.setText("Search name");
+        jButtonSearch.setFocusable(false);
+        jButtonSearch.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonSearch.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSearchActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanelContainerLayout = new javax.swing.GroupLayout(jPanelContainer);
         jPanelContainer.setLayout(jPanelContainerLayout);
         jPanelContainerLayout.setHorizontalGroup(
             jPanelContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 814, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelContainerLayout.createSequentialGroup()
+                .addContainerGap(167, Short.MAX_VALUE)
+                .addComponent(jButtonSearch)
+                .addGap(18, 18, 18)
+                .addComponent(jTextFieldSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(153, 153, 153))
             .addGroup(jPanelContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanelContainerLayout.createSequentialGroup()
                     .addContainerGap()
@@ -369,7 +377,12 @@ public class Window extends javax.swing.JFrame {
         );
         jPanelContainerLayout.setVerticalGroup(
             jPanelContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 452, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelContainerLayout.createSequentialGroup()
+                .addContainerGap(445, Short.MAX_VALUE)
+                .addGroup(jPanelContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jButtonSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jTextFieldSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
             .addGroup(jPanelContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanelContainerLayout.createSequentialGroup()
                     .addContainerGap()
@@ -398,9 +411,8 @@ public class Window extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jPanelContainer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         pack();
@@ -668,35 +680,35 @@ public class Window extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonDeleteActionPerformed
 
     private void jButtonPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPrintActionPerformed
-       PrinterJob job = PrinterJob.getPrinterJob();
-            job.setJobName("Print Data");
-            
-            job.setPrintable(new Printable(){
-            public int print(Graphics pg,PageFormat pf, int pageNum){
-                    pf.setOrientation(PageFormat.PORTRAIT);
-                    
-                 if(pageNum>0){
+        PrinterJob job = PrinterJob.getPrinterJob();
+        job.setJobName("Print Data");
+
+        job.setPrintable(new Printable() {
+            public int print(Graphics pg, PageFormat pf, int pageNum) {
+                pf.setOrientation(PageFormat.PORTRAIT);
+
+                if (pageNum > 0) {
                     return Printable.NO_SUCH_PAGE;
-                }                
-                Graphics2D g2 = (Graphics2D)pg;
+                }
+                Graphics2D g2 = (Graphics2D) pg;
                 g2.translate(pf.getImageableX(), pf.getImageableY());
-                g2.scale(0.50,0.50);
-                g2.translate(175,100);                
-                
+                g2.scale(0.50, 0.50);
+                g2.translate(175, 100);
+
                 jPanelContainer.paint(g2);
-          
-                return Printable.PAGE_EXISTS;                       
-                
-            }           
-    });
-         
+
+                return Printable.PAGE_EXISTS;
+
+            }
+        });
+
         boolean ok = job.printDialog();
-        if(ok){
-        try{
-            
-        job.print();
-        }
-        catch (PrinterException ex){}
+        if (ok) {
+            try {
+
+                job.print();
+            } catch (PrinterException ex) {
+            }
         }
     }//GEN-LAST:event_jButtonPrintActionPerformed
 
@@ -801,6 +813,17 @@ public class Window extends javax.swing.JFrame {
         //---
     }//GEN-LAST:event_jButtonExportActionPerformed
 
+    private void jButtonSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchActionPerformed
+        String searchTerm = jTextFieldSearch.getText();
+
+        for (int i = 0; i < arrayList.size(); i++) {
+            if(arrayList.get(i).getName().contains(searchTerm)) {
+                jSlider.setValue(i);
+                break;
+            }
+        }
+    }//GEN-LAST:event_jButtonSearchActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -866,7 +889,6 @@ public class Window extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JToolBar.Separator jSeparator1;
-    private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JSlider jSlider;
     private javax.swing.JSplitPane jSplitPane1;
@@ -876,6 +898,7 @@ public class Window extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldEmail;
     private javax.swing.JTextField jTextFieldName;
     private javax.swing.JTextField jTextFieldPhone;
+    private javax.swing.JTextField jTextFieldSearch;
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
 
