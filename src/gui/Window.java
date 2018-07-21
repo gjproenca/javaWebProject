@@ -25,6 +25,8 @@ import javax.swing.JFileChooser;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -101,7 +103,11 @@ public class Window extends javax.swing.JFrame {
         jTextFieldName = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextAreaAddress = new javax.swing.JTextArea();
+        jLabelValidateName = new javax.swing.JLabel();
+        jLabelValidatePhone = new javax.swing.JLabel();
+        jLabelValidateEmail = new javax.swing.JLabel();
         jSlider = new javax.swing.JSlider();
+        jButtonClearSearch = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setLocation(new java.awt.Point(0, 0));
@@ -199,7 +205,7 @@ public class Window extends javax.swing.JFrame {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jSplitPane1.setDividerLocation(385);
+        jSplitPane1.setDividerLocation(400);
         jSplitPane1.setEnabled(false);
 
         jSplitPane2.setDividerLocation(150);
@@ -219,7 +225,7 @@ public class Window extends javax.swing.JFrame {
             jPanelNotesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelNotesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 407, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanelNotesLayout.setVerticalGroup(
@@ -250,16 +256,13 @@ public class Window extends javax.swing.JFrame {
         jPanelImage.setLayout(jPanelImageLayout);
         jPanelImageLayout.setHorizontalGroup(
             jPanelImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelImageLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabelImage, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addComponent(jLabelImage, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
         );
         jPanelImageLayout.setVerticalGroup(
             jPanelImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelImageLayout.createSequentialGroup()
-                .addComponent(jLabelImage, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 21, Short.MAX_VALUE))
+                .addComponent(jLabelImage, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 20, Short.MAX_VALUE))
         );
 
         jSplitPane2.setLeftComponent(jPanelImage);
@@ -287,6 +290,12 @@ public class Window extends javax.swing.JFrame {
         jTextAreaAddress.setRows(5);
         jScrollPane2.setViewportView(jTextAreaAddress);
 
+        jLabelValidateName.setForeground(new java.awt.Color(255, 51, 51));
+
+        jLabelValidatePhone.setForeground(new java.awt.Color(255, 51, 51));
+
+        jLabelValidateEmail.setForeground(new java.awt.Color(255, 51, 51));
+
         javax.swing.GroupLayout jPanelDetailsLayout = new javax.swing.GroupLayout(jPanelDetails);
         jPanelDetails.setLayout(jPanelDetailsLayout);
         jPanelDetailsLayout.setHorizontalGroup(
@@ -297,13 +306,22 @@ public class Window extends javax.swing.JFrame {
                     .addComponent(jTextFieldName)
                     .addComponent(jTextFieldPhone)
                     .addComponent(jTextFieldEmail)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 377, Short.MAX_VALUE)
                     .addGroup(jPanelDetailsLayout.createSequentialGroup()
                         .addGroup(jPanelDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
                             .addComponent(jLabel4)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
+                            .addGroup(jPanelDetailsLayout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabelValidateEmail))
+                            .addGroup(jPanelDetailsLayout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabelValidateName))
+                            .addGroup(jPanelDetailsLayout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabelValidatePhone)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -311,21 +329,27 @@ public class Window extends javax.swing.JFrame {
             jPanelDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelDetailsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addGroup(jPanelDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabelValidateName))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel2)
+                .addGroup(jPanelDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabelValidatePhone))
                 .addGap(5, 5, 5)
                 .addComponent(jTextFieldPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel3)
+                .addGroup(jPanelDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabelValidateEmail))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextFieldEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -336,9 +360,9 @@ public class Window extends javax.swing.JFrame {
         jPanelContainerLayout.setHorizontalGroup(
             jPanelContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelContainerLayout.createSequentialGroup()
-                .addGap(22, 22, 22)
+                .addContainerGap()
                 .addComponent(jSplitPane1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanelMain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -358,24 +382,31 @@ public class Window extends javax.swing.JFrame {
         jSlider.setSnapToTicks(true);
         jSlider.setValue(0);
 
+        jButtonClearSearch.setText("Clear search");
+        jButtonClearSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonClearSearchActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanelContainer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButtonSearch)
                 .addGap(18, 18, 18)
                 .addComponent(jTextFieldSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(150, 150, 150))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(18, 18, 18)
+                .addComponent(jButtonClearSearch)
+                .addGap(97, 97, 97))
+            .addComponent(jPanelContainer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -385,11 +416,12 @@ public class Window extends javax.swing.JFrame {
                 .addComponent(jPanelContainer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jTextFieldSearch)
-                    .addComponent(jButtonSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(16, 16, 16))
+                    .addComponent(jButtonSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonClearSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         pack();
@@ -514,84 +546,86 @@ public class Window extends javax.swing.JFrame {
     }
 
     private void jButtonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveActionPerformed
-        Person person = new Person(jTextFieldName.getText(), jTextFieldPhone.getText(),
-                jTextFieldEmail.getText(), jTextAreaAddress.getText(), jTextAreaNotes.getText(), jLabelImage.getIcon(), iconName);
+        if (validateFields() == true) {
+            Person person = new Person(jTextFieldName.getText(), jTextFieldPhone.getText(),
+                    jTextFieldEmail.getText(), jTextAreaAddress.getText(), jTextAreaNotes.getText(), jLabelImage.getIcon(), iconName);
 
-        if (isNew == true) {
-            try {
-                FileOutputStream file = new FileOutputStream("phonebook.dat");
-                ObjectOutputStream out = new ObjectOutputStream(file);
+            if (isNew == true) {
+                try {
+                    FileOutputStream file = new FileOutputStream("phonebook.dat");
+                    ObjectOutputStream out = new ObjectOutputStream(file);
 
-                arrayList.add(person);
+                    arrayList.add(person);
 
-                for (int i = 0; i < arrayList.size(); i++) {
-                    out.writeObject(arrayList.get(i));
-                }
-
-                System.out.println("Array list size after new save = " + arrayList.size());
-                System.out.println(person.getImage());
-
-                out.close();
-                file.close();
-
-                setEditableFalse();
-
-                jSlider.setMaximum(arrayList.size() - 1);
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
-
-            // copy image
-            if (isNewImage == true) {
-                if (person.getImage() != null) {
-                    try {
-                        copyImage();
-                        System.out.println("Image copied successfuly");
-                    } catch (IOException ex) {
-                        Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
+                    for (int i = 0; i < arrayList.size(); i++) {
+                        out.writeObject(arrayList.get(i));
                     }
-                }
-                isNewImage = false;
-            }
 
-            isNew = false;
-        } else if (isEdit == true) {
-            try {
-                FileOutputStream file = new FileOutputStream("phonebook.dat");
-                ObjectOutputStream out = new ObjectOutputStream(file);
+                    System.out.println("Array list size after new save = " + arrayList.size());
+                    System.out.println(person.getImage());
 
-                arrayList.set(jSlider.getValue(), person);
+                    out.close();
+                    file.close();
 
-                for (int i = 0; i < arrayList.size(); i++) {
-                    out.writeObject(arrayList.get(i));
+                    setEditableFalse();
+
+                    jSlider.setMaximum(arrayList.size() - 1);
+                } catch (IOException e) {
+                    System.out.println(e.getMessage());
                 }
 
-                System.out.println("Array list size after edit = " + arrayList.size());
-
-                out.close();
-                file.close();
-
-                setEditableFalse();
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
-
-            // copy image
-            if (isNewImage == true) {
-                if (person.getImage() != null) {
-                    try {
-                        copyImage();
-                        System.out.println("Image copied successfuly");
-                    } catch (IOException ex) {
-                        Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
+                // copy image
+                if (isNewImage == true) {
+                    if (person.getImage() != null) {
+                        try {
+                            copyImage();
+                            System.out.println("Image copied successfuly");
+                        } catch (IOException ex) {
+                            Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
+                    isNewImage = false;
                 }
-                isNewImage = false;
-            }
 
-            isEdit = false;
-        } else {
-            JOptionPane.showMessageDialog(rootPane, "Nothing to save.", "Inane warning", JOptionPane.WARNING_MESSAGE);
+                isNew = false;
+            } else if (isEdit == true) {
+                try {
+                    FileOutputStream file = new FileOutputStream("phonebook.dat");
+                    ObjectOutputStream out = new ObjectOutputStream(file);
+
+                    arrayList.set(jSlider.getValue(), person);
+
+                    for (int i = 0; i < arrayList.size(); i++) {
+                        out.writeObject(arrayList.get(i));
+                    }
+
+                    System.out.println("Array list size after edit = " + arrayList.size());
+
+                    out.close();
+                    file.close();
+
+                    setEditableFalse();
+                } catch (IOException e) {
+                    System.out.println(e.getMessage());
+                }
+
+                // copy image
+                if (isNewImage == true) {
+                    if (person.getImage() != null) {
+                        try {
+                            copyImage();
+                            System.out.println("Image copied successfuly");
+                        } catch (IOException ex) {
+                            Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    isNewImage = false;
+                }
+
+                isEdit = false;
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "Nothing to save.", "Inane warning", JOptionPane.WARNING_MESSAGE);
+            }
         }
     }//GEN-LAST:event_jButtonSaveActionPerformed
 
@@ -789,24 +823,85 @@ public class Window extends javax.swing.JFrame {
         //---
     }//GEN-LAST:event_jButtonExportActionPerformed
 
-    private boolean validateFields(){
-        return false;
-//        boolean isValidName = false;
-//        boolean isValidPhone = false;
-//        boolean isValidEmail = false;
-//        if()
+    private boolean validateFields() {
+        boolean isValidName = false;
+        boolean isValidPhone = false;
+        boolean isValidPhoneNumber = false;
+        boolean isValidEmail = false;
+
+        //name
+        if (jTextFieldName.getText().equals("")) {
+            jLabelValidateName.setText("Required Field!");
+        } else {
+            jLabelValidateName.setText("");
+            isValidName = true;
+        }
+
+        try {
+            Long.parseLong(jTextFieldPhone.getText());
+            isValidPhoneNumber = true;
+        } catch (Exception e) {
+        }
+
+        //phone
+        if (jTextFieldPhone.getText().equals("")) {
+            jLabelValidatePhone.setText("Required Field!");
+        } else if (isValidPhoneNumber == false) {
+            jLabelValidatePhone.setText("Invalid Phone Number!");
+        } else {
+            jLabelValidatePhone.setText("");
+            isValidPhone = true;
+        }
+
+        //email
+        if (jTextFieldEmail.getText().equals("")) {
+            jLabelValidateEmail.setText("Required Field!");
+        } else {
+            try {
+                InternetAddress emailAddress = new InternetAddress(jTextFieldEmail.getText());
+                emailAddress.validate();
+
+                jLabelValidateEmail.setText("");
+                isValidEmail = true;
+            } catch (AddressException ex) {
+                jLabelValidateEmail.setText("Invalid Email!");
+            }
+        }
+
+        //return
+        if (isValidName == true && isValidPhone == true && isValidEmail == true) {
+            return true;
+        } else {
+            return false;
+        }
     }
-    
+
+
     private void jButtonSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchActionPerformed
         String searchTerm = jTextFieldSearch.getText();
+        boolean found = false;
 
-        for (int i = 0; i < arrayList.size(); i++) {
-            if (arrayList.get(i).getName().contains(searchTerm)) {
-                jSlider.setValue(i);
-                break;
+        if (searchTerm.equals("")) {
+            JOptionPane.showMessageDialog(rootPane, "Search field empty.", "Warning", JOptionPane.WARNING_MESSAGE);
+            jTextFieldSearch.requestFocusInWindow();
+        } else {
+            for (int i = 0; i < arrayList.size(); i++) {
+                if (arrayList.get(i).getName().contains(searchTerm)) {
+                    jSlider.setValue(i);
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found == false) {
+                JOptionPane.showMessageDialog(rootPane, "Found no results.", "Information", JOptionPane.INFORMATION_MESSAGE);
             }
         }
     }//GEN-LAST:event_jButtonSearchActionPerformed
+
+    private void jButtonClearSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonClearSearchActionPerformed
+        jTextFieldSearch.setText("");
+    }//GEN-LAST:event_jButtonClearSearchActionPerformed
 
     /**
      * @param args the command line arguments
@@ -852,6 +947,7 @@ public class Window extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonClearSearch;
     private javax.swing.JButton jButtonDelete;
     private javax.swing.JButton jButtonEdit;
     private javax.swing.JButton jButtonExport;
@@ -864,6 +960,9 @@ public class Window extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabelImage;
+    private javax.swing.JLabel jLabelValidateEmail;
+    private javax.swing.JLabel jLabelValidateName;
+    private javax.swing.JLabel jLabelValidatePhone;
     private javax.swing.JPanel jPanelContainer;
     private javax.swing.JPanel jPanelDetails;
     private javax.swing.JPanel jPanelImage;
