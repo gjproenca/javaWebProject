@@ -456,7 +456,6 @@ public class Window extends javax.swing.JFrame {
 
     private void makeDirectories() {
         File images = new File("images");
-        File export = new File("export");
         File datFile = new File("phonebook.dat");
 
         // if the directory images does not exist, create it
@@ -475,23 +474,7 @@ public class Window extends javax.swing.JFrame {
             }
         }
 
-        // if the directory export does not exist, create it
-        if (!export.exists()) {
-            System.out.println("creating directory: " + export.getName());
-            boolean result = false;
-
-            try {
-                export.mkdir();
-                result = true;
-            } catch (SecurityException se) {
-                //handle it
-            }
-            if (result) {
-                System.out.println("DIR created");
-            }
-        }
-
-        // if the directory export does not exist, create it
+        // if phonebook.dat does not exist, create it
         if (!datFile.exists()) {
             try {
                 if (datFile.createNewFile()) {
@@ -570,6 +553,8 @@ public class Window extends javax.swing.JFrame {
                     setEditableFalse();
 
                     jSlider.setMaximum(arrayList.size() - 1);
+                    
+                    jSlider.setValue(arrayList.size() -1);
                 } catch (IOException e) {
                     System.out.println(e.getMessage());
                 }
@@ -658,7 +643,6 @@ public class Window extends javax.swing.JFrame {
 
         setEditableTrue();
         isEdit = true;
-        //TODO: cancel button
     }//GEN-LAST:event_jButtonEditActionPerformed
 
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
@@ -741,7 +725,7 @@ public class Window extends javax.swing.JFrame {
         for (int i = 0; i < arrayList.size(); i++) {
 
             Element personElement = document.createElement("PersonDetails");
-            //personElement.setAttribute("id", "" + tab[i].getId());
+            personElement.setAttribute("id", "" + i);
             rootElement.appendChild(personElement);
 
             Element name = document.createElement("Name");
@@ -986,10 +970,10 @@ public class Window extends javax.swing.JFrame {
 
     // our variables
     JFileChooser jFileChooser;
+    private Person person;
+    private ArrayList<Person> arrayList = new ArrayList<Person>();
+    private String iconName = "";
     private boolean isNew = false;
     private boolean isEdit = false;
     private boolean isNewImage = false;
-    private String iconName = "";
-    private Person person;
-    private ArrayList<Person> arrayList = new ArrayList<Person>();
 }
