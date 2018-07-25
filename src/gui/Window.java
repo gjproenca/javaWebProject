@@ -1,15 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gui;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.print.PrinterException;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 import java.io.IOException;
 import java.awt.Image;
 import java.awt.print.PageFormat;
@@ -42,7 +36,10 @@ import org.apache.commons.io.FileUtils;
 
 /**
  *
- * @author osao
+ * @author Helio Rodrigues
+ * @author Gonçalo Loureiro
+ * @author Gonçalo Proença
+ * 
  */
 public class Window extends javax.swing.JFrame {
 
@@ -692,7 +689,6 @@ public class Window extends javax.swing.JFrame {
                 jPanelContainer.paint(g2);
 
                 return Printable.PAGE_EXISTS;
-
             }
         });
 
@@ -723,7 +719,6 @@ public class Window extends javax.swing.JFrame {
         document.appendChild(rootElement);
 
         for (int i = 0; i < arrayList.size(); i++) {
-
             Element personElement = document.createElement("PersonDetails");
             personElement.setAttribute("id", "" + i);
             rootElement.appendChild(personElement);
@@ -860,17 +855,16 @@ public class Window extends javax.swing.JFrame {
         }
     }
 
-
     private void jButtonSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchActionPerformed
-        String searchTerm = jTextFieldSearch.getText();
+        String searchTerm = jTextFieldSearch.getText().toLowerCase();
         boolean found = false;
 
         if (searchTerm.equals("")) {
-            JOptionPane.showMessageDialog(rootPane, "Search field empty.", "Warning", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(rootPane, "Empty search field.", "Warning", JOptionPane.WARNING_MESSAGE);
             jTextFieldSearch.requestFocusInWindow();
         } else {
             for (int i = 0; i < arrayList.size(); i++) {
-                if (arrayList.get(i).getName().contains(searchTerm)) {
+                if (arrayList.get(i).getName().toLowerCase().contains(searchTerm)) {
                     jSlider.setValue(i);
                     found = true;
                     break;
@@ -878,7 +872,7 @@ public class Window extends javax.swing.JFrame {
             }
 
             if (found == false) {
-                JOptionPane.showMessageDialog(rootPane, "Found no results.", "Information", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(rootPane, "No results found.", "Information", JOptionPane.INFORMATION_MESSAGE);
             }
         }
     }//GEN-LAST:event_jButtonSearchActionPerformed
@@ -968,7 +962,7 @@ public class Window extends javax.swing.JFrame {
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
 
-    // our variables
+    // software variables
     JFileChooser jFileChooser;
     private Person person;
     private ArrayList<Person> arrayList = new ArrayList<Person>();
